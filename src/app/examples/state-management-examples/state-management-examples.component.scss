@@ -1,0 +1,111 @@
+@import "../../../sass/variables.scss";
+
+:host {
+  width: 100%;
+  max-width: 1200px;
+  height: calc(100% - 300px); // 300px for padding
+  padding: 150px 10vw;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+* {
+  line-height: 1.8rem;
+  color: #0c1327;
+}
+
+aside {
+  margin-left: 3rem;
+  flex-basis: 20%;
+  position: sticky;
+  top: 90px;
+
+  color: $experity-blue;
+  border-left: 5px solid $experity-green;
+}
+
+aside ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 20px;
+}
+
+aside ul li {
+  font-size: 14px;
+  margin-bottom: 1rem;
+}
+
+aside ul li a {
+  text-decoration: none;
+  color: #0c1327;
+}
+
+aside ul li a:hover {
+  text-decoration: underline;
+  text-decoration-color: $experity-green;
+}
+
+article {
+  flex-grow: 2;
+  flex-shrink: 2;
+  max-width: 50rem;
+}
+
+#api-example {
+  min-height: 150px;
+  width: 300px;
+  margin: 0px auto;
+}
+
+h3::before {
+  display: block;
+  content: " ";
+  margin-top: -60px;
+  height: 60px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+span {
+  padding: 0.1rem 0.3rem 0.15rem;
+  margin: 0 0.1rem;
+  background-color: hsl(224, 53%, 94%);
+  border: 1px solid hsl(224, 53%, 85%);
+  border-radius: 0.2rem;
+}
+
+code {
+  display: inline-block;
+  padding: 0.1rem 0.3rem 0.15rem;
+  margin: 0 0.1rem;
+
+  font-family: "Operator Mono", "Source Code Pro", Menlo, Consolas, Monaco, monospace;
+  line-height: 1.3rem;
+
+  color: #199a28;
+  background-color: hsl(224, 53%, 94%);
+  border: 1px solid hsl(224, 53%, 85%);
+  border-radius: 0.2rem;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  margin: 50px auto;
+  border-radius: 6px;
+  box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.3), 0px 0px 30px rgba(0, 0, 0, 0.08);
+}
+
+a {
+  color: $experity-blue;
+  text-decoration-color: $experity-green;
+  text-underline-position: under;
+}
+
+a:hover {
+  text-decoration-color: $experity-blue;
+}

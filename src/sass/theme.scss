@@ -1,0 +1,11 @@
+@import "../../node_modules/@angular/material/theming";
+@import "palette.scss";
+@include mat-core();
+
+$primary: #1a2954;
+$accent: #21cf36;
+$warn: #f44336;
+
+$base-theme: mat-light-theme(mat-palette($primary-palette), mat-palette($accent-palette), mat-palette($warn-palette));
+
+@include angular-material-theme($base-theme);

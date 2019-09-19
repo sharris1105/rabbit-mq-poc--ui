@@ -1,0 +1,170 @@
+<aside>
+  <ul>
+    <li><a href="/examples/state-management#managing-state">Managing State</a></li>
+    <li><a href="/examples/state-management#property-binding">Property Binding</a></li>
+    <li><a href="/examples/state-management#services">Shared Services</a></li>
+    <li><a href="/examples/state-management#promises-observables">Promises vs. Observables</a></li>
+  </ul>
+</aside>
+<article>
+  <section>
+    <header>
+      <h3 id='managing-state'>Managing State</h3>
+    </header>
+    <p>
+      No matter the application, components will need to communicate with each other and pass data back and forth. There
+      are several ways to accomplish this and each method has pros and cons. There are a few factors that determine
+      which method is most appropriate:
+    </p>
+    <ul>
+      <li>The number of components that listen to changes to the data in question</li>
+      <li>The relationship between components listening to changes and the component triggering changes</li>
+      <li>The overall complexity of the application</li>
+    </ul>
+  </section>
+  <section>
+    <header>
+      <h3 id='property-binding'>Property Binding</h3>
+    </header>
+    <h4>When it's appropriate:</h4>
+    <ul>
+      <li>Clear parent-child data flow</li>
+    </ul>
+    <p>
+      Property binding is the simplest way to pass data between two components and is consequently the
+      most limited. With property binding, components pass data to child components declaratively in the
+      parent's template. The child component can then notify the parent of events using the corresponding
+      <code>@Output()</code> event binding. While property binding is convenient and appropriate in some scenarios,
+      things fall apart quickly. Not only does it tightly couple two components to each other, what if a grandchild
+      component needs the data, or a <em>great</em>-grandchild? Things can become spaghettified rather quickly. For more
+      on property binding and relevant syntax, see the official documentation <a
+        href="https://angular.io/guide/template-syntax#property-binding-property">here</a>.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='services'>Shared Services</h3>
+    </header>
+    <h4>When it's appropriate:</h4>
+    <ul>
+      <li>Many components depend on data in question</li>
+      <li>The components that need to communicate do not have a parent-child relationship</li>
+    </ul>
+    <p>
+      Services are a simple way to broadcast data changes to multiple consumers in a way that separates concerns and
+      keeps the relevant components/files loosely coupled. To do this, the burden of data management is moved to
+      separate services and out of components. Components use Angular's dependency injection framework to access these
+      services. Let's look at the constructor of the <code>api-examples.component.ts</code> as an example:
+    </p>
+    <figure>
+      <img src="../../../assets/images/state-management-examples/dependency-injection.png" alt="">
+    </figure>
+    <p>
+      Here, using Angular's dependency injection, the constructor gives private references to two services. By
+      convention, these are made readonly so that dependencies don't change at runtime. The beauty of this approach is
+      that any number of components in the application can use one of these services without any added implementation
+      effort; neither the component using the service nor the service itself knows how many other components are sharing
+      the functionality. Consuming the data from the <code>ExampleDataService</code> is rather simple:
+    </p>
+    <figure>
+      <img src="../../../assets/images/api-examples/service-call.png" alt="">
+    </figure>
+    <p>
+      The <code>exampleDataService.getApiVersion()</code> method makes an HTTP request behind the scenes, but the
+      <code>api-examples.component</code> doesn't know that, nor should it. From the component's perspective, the data
+      magically appears when it's ready. In this case, the <code>exampleDataService</code> returns the data in a
+      Promise, but this is not the only way. Observables, part of the RxJS library, are another way to share data. But
+      what's the difference between Promises and Observables, and which is best for a particular situation?
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='promises-observables'>Promises vs. Observables</h3>
+    </header>
+    <h4>Promises</h4>
+    <p>
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">Promises</a> are JavaScript
+      objects used when manipulating asynchronous operations. In the old days, any asynchronous operation would have to
+      be acted upon by using (perhaps many) callback functions. While this was functionally adequate, any amount of
+      complexity (multiple asynchronous events, multiple callbacks, etc.) quickly led to code that was difficult to
+      maintain and understand. Promises solve a lot of these problems by giving a more concise, easy-to-understand
+      syntax that also gives a lot of convenient functionality like callback chaining (i.e. wait for this to happen,
+      <em>then</em> do this, <em>then</em> that, etc.). See the MDN documentation on Promises <a
+        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">here</a> for more details.
+    </p>
+    <p>
+      So when should you use Promises? Generally speaking, Promises are best utilized when an asynchronous event will
+      happen either zero or one times. A common example of this is waiting for an API response. Typically, the response
+      will contain all the requested data in one big lump (or an error if something's gone wrong). If another request is
+      made for some new data, a corresponding Promise is created to handle that response. See the <a
+        routerLink="/examples/api">API Examples</a> page for some examples of using Promises to handle HTTP requests.
+    </p>
+    <h4>Observables</h4>
+    <p>
+      <a href="https://rxjs-dev.firebaseapp.com/guide/overview">RxJS</a> is a popular Reactive Programming library
+      included with Angular out of the box. The core concept and type of RxJS is the Observable. Observables are similar
+      to Promises in that they help handle asynchronous operations, but Observables have some advantages over Promises
+      along with some disadvantages. While Promises treat asynchronous operations as <em>single</em> events, Observables
+      treat them as <em>streams</em> of events. In other words, Observables can return zero, one, or <em>many</em>
+      values over time.
+    </p>
+    <p>
+      An example situation best served with Observables is a Practice or Clinic dropdown. If a user switches Practices,
+      the app's components would need to update the data displayed to the user, perhaps kicking off new HTTP requests in
+      the process. Compare this scenario to the Promises scenario above where a single HTTP request is sent in reaction
+      to a button click. In that case, we know that we can start listening for a response once we send a request, and
+      stop listening once we receive a response. In the case of the Practice dropdown, however, the user could
+      change practices <em>at any time</em>, if ever. Observables, then, often listen for, or subscribe to, changes over
+      the lifetime of a component. Let's see an example of this from the Rules Engine Admin Portal:
+    </p>
+    <figure>
+      <img src="../../../assets/images/state-management-examples/update-observable.png" alt="">
+    </figure>
+    <p>
+      This method, <code>setSelectedPractice()</code>, is the handler for the <code>selectionChange</code> event of a
+      dropdown. The selected value of the dropdown is bound to the <code>selectedPractice</code> property. While this
+      doesn't look like much, it highlights how little the dropdown has to do to notify any components who care that
+      <code>selectedPractice</code> has changed. All that's necessary is notifying the <code>practiceService</code>
+      (which we'll see momentarily) and the service takes care of the rest. Next, let's see how a component reacts to
+      the change:
+    </p>
+    <figure>
+      <img src="../../../assets/images/state-management-examples/observable-subscription.png" alt="">
+    </figure>
+    <p>
+      This sets up a <em>subscription</em> to the observable returned by <code>getPracticeBehaviorSubject()</code>. The
+      <code>practiceService</code> is the same one that the dropdown updated above. Every time the dropdown updates the
+      observable, the service notifies any subscribed components. Every time that happens, the code on lines 33-35
+      executes. A few other things to note: 1. Since we established that components need to always be listening for
+      changes, we set this subscription up in the <code>ngOnInit()</code> life cycle hook. 2. Inside the subscription,
+      we have to check that the practice exists on line 34 because the observable is initialized with a null value.
+      Let's look at the <code>practiceService</code> to see that happening:
+    </p>
+    <figure>
+      <img src="../../../assets/images/state-management-examples/practice-service.png" alt="">
+    </figure>
+    <p>
+      Here, we see the two methods called by the dropdown and the listener component along with the actual observable
+      that holds the state. "But wait," you may be saying, "What's this <code>BehaviorSubject</code> nonsense? I
+      thought we were talking about Observables!" A <code>BehaviorSubject</code> is a special type of Observable that
+      allows for multi-casting, i.e. notifying multiple listeners at once. The <code>next()</code> method updates the
+      value of the <code>BehaviorSubject</code>, which then automatically notifies all listeners. That's it! in 10-20
+      lines of code we now have a fully decoupled communication channel for as many components as we want.
+    </p>
+    <p>
+      So what's the catch? There are a few common gotchas with Observables. First, <strong>the Observable won't actually
+        broadcast any value updates until something subscribes to it.</strong> I can't tell you how much time I've
+      personally lost trying to troubleshoot this particular fact. If you try to log to the console every time you
+      update and Observable and can't figure out why it's not working, double check you actually subscribe to it
+      somewhere.
+    </p>
+    <p>
+      Second, if you don't unsubscribe from the observables when the components are destroyed, tada! 🎉 You
+      have yourself a memory leak. There are a few ways to handle this. First, you can store a reference to the
+      subscription and manually call <code>unsubscribe()</code> in the <code>ngOnDestroy()</code> life cycle hook. A
+      second method is to use the <code>async</code> pipe in the template binding. For more info on the
+      <code>async</code> pipe, see the official docs <a
+        href="https://angular.io/guide/observables-in-angular#async-pipe">here</a>.
+    </p>
+  </section>
+</article>

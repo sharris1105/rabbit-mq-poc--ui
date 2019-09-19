@@ -1,0 +1,397 @@
+<aside>
+  <ul>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#running">Building and Running the Application</a></li>
+    <li><a href="#running-locally">Running Locally</a></li>
+    <li><a href="#unit-tests">Running Unit Tests</a></li>
+    <li><a href="#debugging">Debugging</a></li>
+    <li><a href="#debugging-unit-tests">Debugging Unit Tests</a></li>
+    <li><a href="#folder-structure">Folder Structure</a></li>
+    <li><a href="#naming-conventions">Naming Conventions</a></li>
+    <li><a href="#bundling">Bundling the Application</a></li>
+    <li><a href="#service-worker">Configuring the Service Worker</a></li>
+    <li><a href="#adding-code">Adding Your Code</a></li>
+    <li><a href="#deleting-code">Deleting the Example Files</a></li>
+    <li><a href="#next-steps">Next Steps</a></li>
+  </ul>
+</aside>
+<article>
+  <header>
+    <h1>Welcome to your new Angular App! 🎉</h1>
+  </header>
+  <section>
+    <header>
+      <h3 id='getting-started'>Getting Started</h3>
+    </header>
+    <p>
+      The guts of this app live in the <code>~/src/app/</code> directory. You should see several items in that
+      folder. Right now, you're reading the contents of <code>welcome/welcome.component.html</code>, which itself
+      lives inside <code>home/home.component.html</code>. If you'd like to get developing right away, go ahead and
+      remove the <code>app-welcome</code> element from the home component. Then, create a new component with the
+      following command: <code [innerHTML]="generateCommand"></code>. Don't forget to delete the welcome component at
+      some point! 😉
+    </p>
+    <p>
+      If you're new to VSCode, <a href="https://code.visualstudio.com/download">try it out if you haven't</a>, and check
+      out the <a href="https://marketplace.visualstudio.com/items?itemName=chris-bell.experity-vscode-extension-pack"
+        target="_blank">Experity VSCode Extension Pack</a>. In it you'll find numerous functional and cosmetic upgrades
+      to VSCode, including Angular development tools, a code spell-checker, GitLens, Live Code Share and more. If you'd
+      prefer a slimmer, more functional pack of extensions,
+      <a href="https://marketplace.visualstudio.com/items?itemName=chris-bell.experity-vscode-essentials"
+        target="_blank">Experity VSCode Essentials</a> trims out the cosmetic ones.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='running'>Building and Running the Application</h3>
+    </header>
+    <p>
+      If you're here for the first time, you probably did so by hitting F5. Well done! 👏 Typing F5 launches the default
+      debug configuration. Right now, that is "Launch dev build":
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/debug.PNG" alt="Debug launch configuration">
+    </figure>
+    <p>
+      You can also hit the green play button instead of typing F5 to launch the debugger. VSCode's debugger is
+      configured in the <code>launch.json</code> and <code>tasks.json</code> files. Don't worry about their contents for
+      now, but it's good to keep in mind that they are what drives the debugger. Debugging is explained more below in
+      the <a href="#debugging">debugging</a> section.
+    </p>
+    <p>
+      The most common way to build Angular applications is through the command line interface (CLI). While the CLI has
+      <a href="https://angular.io/cli" target="_blank">a comprehensive suite of commands</a>, the most commonly used
+      commands for building and running an application are <code>ng build</code> and <code>ng serve</code>. As you might
+      expect, <code>build</code> compiles the code for your app, while <code>serve</code> will do the same and serve the
+      app to <code>localhost:4200</code>. The built-in terminal in VSCode (<code>Ctrl + j</code>) comes very
+      much in handy here.
+    </p>
+    <p>
+      Things get a little fancier, though. Open up <code>package.json</code> in the root folder of the app. This file
+      is used by the Node Package Manager (NPM) and defines, among other things, the third-party dependencies for the
+      app. These dependencies are defined in the <code>dependencies</code> and <code>devDependencies</code> elements.
+      Contained in <code>dependencies</code> are libraries needed for the core app and will be shipped in the
+      production app code, whereas <code>devDependencies</code> are those libraries needed for local development, like
+      the Angular CLI and unit testing frameworks. When adding a dependency, ensure that it is added to the
+      <code>devDependencies</code> list unless it is actually necessary to run the app.
+    </p>
+    <p>
+      Near the top of the file, you'll see the <code>"scripts": ...</code> element:
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/npm-scripts.png" alt="">
+    </figure>
+    <p>
+      These are convenience scripts for common tasks in the application. Little more than snippets, they can be executed
+      using the NPM CLI like so: <code>npm run [script name]</code> Give it a shot! Try running the "start" script with
+      <code>npm run start</code>. You'll notice in the output that it'll print out the command that it's actually
+      executing. That is to say, running <code>npm run start</code> is equivalent to simply running
+      <code>ng serve -o</code>. This may seem silly, but it can be very convenient when a particular command requires a
+      complicated combination of flags to be set or other commands be run in combination. The
+      <code>start:app-shell</code> script is a good example of this.
+    </p>
+    <p>Commands like <code>start</code> and <code>test</code> are "standard" NPM scripts that virtually every app has.
+      NPM allows you to execute these scripts without the <code>run</code> keyword, so <code>npm start</code> is an
+      equivalent shorthand for <code>npm run start</code>. NPM scripts can be named anything, but only those two will
+      allow for this shorthand; all others must invoke the <code>run</code> command.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='running-locally'>Running Locally</h3>
+    </header>
+    <p>
+      What if you'd like to run the app using a locally-running API? To save time and avoid making requests to
+      hard-coded local API URLs, a separate <code>local</code> Angular environment is provided in the
+      <code>src/environments</code> folder. Using that environment, we can dynamically inject the local url in
+      <code>app/constants.ts</code>:
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/local-environment.png" alt="">
+    </figure>
+    <p>
+      Note that you'll need to replace the Messaging API URL with the URL of your app's API. The Messaging API is only
+      used for demonstration. These constants can then be referenced by a data service thusly:
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/api-call-with-constant.png" alt="">
+    </figure>
+    <p>
+      This way, the URL will resolve to <code>localhost:5000/api/ ...</code> in the local environment and
+      <code>devservices.pracitcevelocity.com/api/ ...</code> otherwise. "So wait," you're probably wondering, "How do I
+      actually use this local environment?" All that's necessary is running a different NPM script:
+      <code>npm run start:local</code>. Under the hood, this tells the Angular compiler to use the local build config
+      defined in <code>angular.json</code>.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='unit-tests'>Running Unit Tests</h3>
+    </header>
+    <p>
+      <a href="https://jasmine.github.io/pages/docs_home.html" target="_blank">Jasmine</a> is the built-in unit testing
+      framework for Angular. The tests themselves are run by the
+      <a href="https://karma-runner.github.io/latest/index.html" target="_blank">Karma</a> test runner. To engage the
+      Karma runner to run the Jasmine tests for this project, open the terminal and run <code>npm test</code>. Karma
+      will run the app's unit tests against three headless (i.e. without opening a window) browsers in succession:
+      Chrome, FireFox, and IE (although IE has no headless configuration so an IE window will actually appear). Karma
+      will then print the results of the tests to the terminal window.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='debugging'>Debugging</h3>
+    </header>
+    <p>
+      There are several different configurations in place to build and run this application. Hitting F5 executes the
+      selected debug config in VSCode, which by default is "Launch dev build". The "Launch dev build" and "Launch prod
+      build" debugger configurations in this app (defined in <code>launch.json</code>) simply run an npm script and
+      attach the VSCode debugger to an instance of Chrome. In order for this to work, the
+      <a href="https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome"
+        target="_blank">Debugger For Chrome</a> VSCode extension is a prerequisite.
+    </p>
+    <p>
+      Once running, the debugger behaves a lot like the Visual Studio debugger that you may be used to. Find
+      <code>welcome.component.ts</code> and place a breakpoint in the <code>ngOnInit()</code> method:
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/breakpoint.PNG" alt="Breakpoint in ngOnInit">
+    </figure>
+    <p>
+      Manually refresh your browser and you should hit your breakpoint. On the left pane, you'll see the usual debugger
+      information: variables in this scope, any watch conditions you may have set up, the current call stack, etc. You
+      can resume execution by either hitting the resume button on the debugger menu, in Chrome itself, or by hitting F5.
+    </p>
+    <p>
+      While debugging, you will have live reload of all of your Angular code. Try it out! Open
+      <code>homecomponent.html</code>, change the text in the <code>h1</code> tag, and hit save. The running Angular
+      server will recompile the code and refresh the Chrome tab so you can see your changes immediately.
+    </p>
+    <p>
+      Clicking on the dropdown at the top will show the other available debug configurations. The "Launch prod build"
+      config will emulate how the app will be built in production: the build will be optimized and the app shell and
+      service worker will be compiled.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='debugging-unit-tests'>Debugging Unit Tests</h3>
+    </header>
+    <p>
+      Return to the Debug menu in VSCode and select "Debug unit tests" from the dropdown. Running this debug config will
+      execute <code>npm run test:debug</code> under the hood. This script starts Karma with the
+      <code>karma.debug.conf.js</code> configuration. There are several differences between the <code>test:debug</code>
+      and <code>test</code> scripts. First, it will only run the tests against Chrome, and that instance of Chrome will
+      no longer be headless. Second, it continues listening for changes after the test run is complete. That way, as you
+      debug the unit tests and make changes to code, it will recompile and re-run the tests. Lastly, the VSCode debugger
+      will be attached to the Chrome instance running the tests, so not only can you hit the usual breakpoints in app
+      code, you can also put breakpoints in the unit tests themselves! ✨
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='folder-structure'>Folder Structure</h3>
+    </header>
+    <p>The <a href="https://angular.io/guide/styleguide#application-structure-and-ngmodules" target="_blank">Official
+        Angular Style Guide</a> recommends keeping application folder structure as flat as possible. Often times,
+      organization is done preemptively and needless nesting is created. To summarize the content of the Style Guide's
+      section on folder structure:
+    </p>
+    <header>
+      <h4>1. Resist the urge to nest folders. The top priority of your folder structure should be ease of location.</h4>
+    </header>
+    <p>
+      If you're working in this application every day, you'll probably be able to find any file easily regardless of how
+      you organize them. Your folder structure, then, should be tailored to benefit unfamiliar developers. Imagine
+      you've never seen this application before; would you easily be able to find that particular class, service, or
+      interface if it was buried 4 directories deep? Probably not. In general flatter (i.e. less nesting) is better. If,
+      after a while, there are too many things in the root <code>src/app/</code> folder, consider reorganizing and
+      grouping things into more nested folders.
+    </p>
+    <header>
+      <h4>2. Organize code files by feature.</h4>
+    </header>
+    <p>
+      This is a consequence of item #1 above. Particularly for unfamiliar devs, grouping code by feature will make them
+      easier to locate. Furthermore, grouping code by feature will lead to easier code bundling and lazy loading.
+    </p>
+    <header>
+      <h4>3. There is no silver bullet solution</h4>
+    </header>
+    <p>
+      The guidelines both here and the official Angular style guide are very vague. In the end, different approaches
+      work for different applications. Apps of different size and feature variety work better or worse with particular
+      approaches. Moreover, size and feature variety change as applications age; you may well find that the folder
+      structure you embark with is insufficient in six months. Remain open to rearranging and rearchitecting.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='naming-conventions'>Naming Conventions</h3>
+    </header>
+    <p>
+      The official style guide also has <a href="https://angular.io/guide/styleguide#naming" target="_blank">guidelines
+        for naming conventions</a>. Most of them are enforced by the <code>tslint.config.ts</code> file in the root of
+      this project. Here are the most commonly used ones:
+    </p>
+    <ul>
+      <li>
+        Use <code>kebab-case</code> for file names, i.e. all lower case with <code>-</code> delimiters. Avoid
+        abbreviations unless the file name is very large (>50 characters) or the abbreviation is industry standard.
+        <code>Good: http-interceptor.service.ts</code>
+        <br>
+        <code>Bad: CrgHdrSvc.ts</code>
+      </li>
+      <li>
+        Follow the default Angular naming convention of <code>descriptor.function.extension</code>, e.g.
+        <code>welcome.component.html</code>, <code>active-provider-filter.pipe.ts</code>, etc.
+      </li>
+      <li>
+        Suffix references to observables with <code>$</code>, e.g. <code>selectedPractice$</code>
+      </li>
+    </ul>
+  </section>
+  <section>
+    <header>
+      <h3 id='bundling'>Bundling the Application</h3>
+    </header>
+    <p>
+      While debugging, head over to the browser instance running the app and hit F12 to bring up the Developer Tools.
+      Click the Network tab to see the list of files that comprise this application. Check the "Disable cache" checkbox
+      and refresh the page. In the toolbar below the "Disable cache" checkbox, click the "JS" button to filter the list
+      to only show Javascript files. Assuming you're running the dev build, you should see something like this:
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/bundles.png" alt="App js bundles">
+    </figure>
+    <p>
+      Thus, we have four Javascript files that comprise our app. The contents of <code>runtime.js</code> and
+      <code>main.js</code> are application-specific code. In order to run in IE (because IE is the scourge of the
+      Internet), we must also include <code>polyfills.js</code> so that IE can understand some of the newer features of
+      modern Javascript. In a production build, <code>polyfills.js</code> will not be served in "Evergreen" browsers
+      like Chrome.
+    </p>
+    <p>
+      Lastly is <code>vendor.js</code>, which holds all the third-party dependencies for the app:
+      Angular framework code, any third-party UI components, essentially anything in the <code>dependencies: ...</code>
+      node of <code>package.json</code>. You'll note that this file is <em><strong>HUGE;</strong></em> 4MB is an
+      enormous amount of data to be downloaded over anything other than the best-case network scenario. For reference,
+      10 seconds or so of 360p video is about the same size. The final file size will end up being smaller than 4MB in a
+      production build, but the size of what we send over the wire, particularly in <code>vendor.js</code>, is something
+      that must be kept in check.
+    </p>
+    <p>
+      Keeping an eye on the 'Network' tab, click the "UI Examples" link in the top navigation. You'll notice something
+      new:
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/lazy-load.png" alt="">
+    </figure>
+    <p>
+      We have a fifth bundle! This highlights a crucial strategy to improve performance: the code for the UI Examples
+      page is not necessary for the initial page load. Angular will separate out the code for it and lazy load it when
+      the user tries to navigate there. More information on implementing lazy loading can be found
+      <a href="https://angular.io/guide/lazy-loading-ngmodules#lazy-loading-feature-modules" target="_blank">here</a>.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id="service-worker">Configuring the Service Worker</h3>
+    </header>
+    <p>
+      This app ships with a service worker. Service workers help augment traditional web apps through programmatic
+      access to application cache, native app features like push notifications, and real-time app update notification. A
+      conceptual overview of service workers can be found <a
+        href="https://angular.io/guide/service-worker-intro">here</a>.
+    </p>
+    <p>
+      The service worker is not included in the usual dev build output from <code>npm start</code>,
+      <code>ng build</code>, etc. To see the service worker in action on your local machine, run
+      <code>npm run serve:service-worker</code>. As of Angular v7.2.0 (the version this app uses), service workers do
+      <em>not</em> work with <code>ng serve</code>, for whatever reason. To avoid this issue, the
+      <code>serve:service-worker</code> script executes <code>ng build --prod</code> which will output the service
+      worker in the build artifacts and fires up an instance of the <code>http-server</code> dev dependency to serve up
+      the files in a new tab.
+    </p>
+    <p>
+      The service worker can be configured in <code>src/ngsw-config.json</code>. By default, it will cache all js and
+      css bundles along with everything in <code>src/assets</code>. After serving the files from the cache, the service
+      worker will check for a new version in the background. If one is found, it will prefetch the files in the
+      background as well. To a user, this is totally transparent; until they refresh, the old, cached versions of the
+      files are what's served. However, in <code>app.component.ts</code>, the <code>SwUpdate</code> service from
+      <code>@angular/service-worker</code> can prompt the user when this happens. If a new version is detected and
+      downloaded, the user will be notified that a new version is available and will be given the option to refresh the
+      page to begin using the new version.
+    </p>
+    <p>
+      Service workers can also cache API responses. These settings will need to be configured on a per-app basis, but an
+      example configuration has been included in <code>ngsw-config.json</code>. Head over to the <a
+        routerLink='examples/api'>API Examples section</a> to learn more.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='adding-code'>Adding Your Code</h3>
+    </header>
+    <p>
+      The Angular CLI also allows us to add new files quickly and easily. The <code>ng generate</code> command will spin
+      up the necessary files for a given argument. Examples of arguments include <code>component</code>,
+      <code>service</code>, and <code>directive</code>. Running <code>ng generate component [component-name]</code> will
+      spin up the necessary code files for a component with some hello world-level scaffolding. The
+      <code>generate</code> command and the <code>component</code> argument also have the shorthand <code>g</code> and
+      <code>c</code>, respectively, so the <code>ng generate component</code> command could be shortened to
+      <code>ng g c</code>. Full documentation of <code>ng generate</code> can be found
+      <a href="https://angular.io/cli/generate" target="_blank">here</a>.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='deleting-code'>Deleting the Example Files</h3>
+    </header>
+    <p>
+      The component you're reading right now, along with the entire Examples section of this app, should be checked into
+      source control. If you're worried about losing the examples and reference materials, fear not! This app is
+      deployed and can be accessed any time
+      <a href="https://devservices.practicevelocity.com/angulartemplate">here</a>. The files highlighted here are what
+      need to be deleted:
+    </p>
+    <ul>
+      <li>app/examples</li>
+      <li>app/welcome (the folder containing this component)</li>
+      <li>assets/images/api-examples</li>
+      <li>assets/images/welcome</li>
+    </ul>
+    <figure>
+      <img src="../../assets/images/welcome/files-to-delete.png" alt="">
+    </figure>
+    <p>
+      Once the files are deleted, the references to those deleted files will also need to be removed. First, in
+      <code>app-routing.module.ts</code> the 'examples' path and edit the default '' path to show your component instead
+      of the <code>WelcomeComponent</code>:
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/routes-to-delete.png" alt="">
+    </figure>
+    <p>
+      After that, head to <code>app.module.ts</code> and delete lines 11, 18, 25, and 26:
+    </p>
+    <figure>
+      <img src="../../assets/images/welcome/imports-to-delete.png" alt="">
+    </figure>
+    <p>
+      ✨<em>Et voilà!</em> ✨ Your new app is officially off the ground! 🚀
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='next-steps'>Next Steps</h3>
+    </header>
+    <p>
+      Now that we've established how to run, debug, and add code to the app, head over to the examples page for more
+      in-depth examples of adding functionality.
+    </p>
+    <button routerLink='examples' id="examples" mat-raised-button color="primary">
+      Examples <mat-icon inline=true>arrow_forward</mat-icon>
+    </button>
+  </section>
+</article>

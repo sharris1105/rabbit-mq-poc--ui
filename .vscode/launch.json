@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch dev build",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "npm: serve"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch prod build",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "npm: serve:prod"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug unit tests",
+      "url": "http://localhost:9876/debug.html",
+      "sourceMapPathOverrides": {
+        "/./*": "${webRoot}/*",
+        "/src/*": "${webRoot}/*",
+        "/*": "*",
+        "/./~/*": "${webRoot}/node_modules/*",
+      },
+      "sourceMaps": true,
+      "webRoot": "${workspaceRoot}",
+      "preLaunchTask": "npm: test:debug"
+    }
+  ]
+}

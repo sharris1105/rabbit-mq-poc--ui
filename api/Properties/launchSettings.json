@@ -1,0 +1,45 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:4201",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "EncryptionPrivateKeyFilePath": "",
+        "SigningPublicKeyFileName": "PublicSigningKey.pem",
+        "AppAuthApiBaseAddress": "https://devservices.practicevelocity.com/applicationauthapi/",
+        "Secret": "****Create new ApplicationKey *****",
+        "EncryptionPublicKeyFilePath": "",
+        "EncryptionPrivateKeyFileName": "RSAPrivateKey.txt",
+        "EncryptionPublicKeyFileName": "EncryptionPublicKey",
+        "JwtIssuer": "RabbitMqPoc",
+        "SigningPublicKeyFilePath": ""
+      }
+    },
+    "RabbitMqPoc": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:4201",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "EncryptionPrivateKeyFilePath": "",
+        "SigningPublicKeyFileName": "PublicSigningKey.pem",
+        "AppAuthApiBaseAddress": "https://devservices.practicevelocity.com/applicationauthapi/",
+        "Secret": "****Create new ApplicationKey *****",
+        "EncryptionPublicKeyFilePath": "",
+        "EncryptionPrivateKeyFileName": "RSAPrivateKey.txt",
+        "EncryptionPublicKeyFileName": "EncryptionPublicKey",
+        "JwtIssuer": "RabbitMqPoc",
+        "SigningPublicKeyFilePath": ""
+      }
+    }
+  }
+}

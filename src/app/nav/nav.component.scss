@@ -1,0 +1,50 @@
+@import "../../sass/variables.scss";
+
+nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  height: 50px;
+  width: 100%;
+  padding: 0;
+  position: fixed;
+  top: 0;
+
+  color: #fff;
+  background-color: $experity-blue;
+
+  //border-bottom: 2px solid $experity-green;
+  box-shadow: 0px 0px 10px -3px #072c0b;
+  z-index: 99;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  height: 100%;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0 1rem;
+}
+
+li:hover {
+  cursor: pointer;
+  background-color: hsl(224, 53%, 28%);
+}
+
+li:focus {
+  outline: 0;
+}
+
+.active {
+  border-color: $experity-green;
+}

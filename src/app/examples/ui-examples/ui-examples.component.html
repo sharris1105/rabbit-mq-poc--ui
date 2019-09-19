@@ -1,0 +1,125 @@
+<aside>
+  <ul>
+    <li><a href="examples/ui#buttons">Buttons</a></li>
+    <li><a href="examples/ui#toggle-buttons">Toggle Buttons</a></li>
+    <li><a href="examples/ui#check-boxes">Check Boxes</a></li>
+    <li><a href="examples/ui#radio-buttons">Radio Buttons</a></li>
+    <li><a href="examples/ui#slide-toggles">Slide Toggles</a></li>
+  </ul>
+</aside>
+<article>
+  <header>
+    <h1>UI</h1>
+  </header>
+  <p>
+    The code for the examples below can be found in the <code>~/examples/ui-examples/</code> folder.
+  </p>
+  <section>
+    <header>
+      <h3 id="buttons">Buttons</h3>
+    </header>
+    <div class="example-button-row">
+      <button mat-raised-button color="primary" class="button-small">Primary</button>
+      <button mat-raised-button color="accent" class="button-small">Accent</button>
+      <button mat-raised-button color="warn" class="button-small">Warn</button>
+      <button mat-raised-button class="button-small">Basic</button>
+      <a mat-raised-button routerLink="." class="button-small">Link</a>
+      <button mat-raised-button disabled class="button-small">Disabled</button>
+    </div>
+    <div class="example-button-row">
+      <button mat-raised-button color="primary" class="button-medium">Primary</button>
+      <button mat-raised-button color="accent" class="button-medium">Accent</button>
+      <button mat-raised-button color="warn" class="button-medium">Warn</button>
+      <button mat-raised-button class="button-medium">Basic</button>
+      <a mat-raised-button routerLink="." class="button-medium">Link</a>
+      <button mat-raised-button disabled class="button-medium">Disabled</button>
+    </div>
+    <div class="example-button-row">
+      <button mat-raised-button color="primary" class="button-large">Primary</button>
+      <button mat-raised-button color="accent" class="button-large">Accent</button>
+      <button mat-raised-button color="warn" class="button-large">Warn</button>
+      <button mat-raised-button class="button-large">Basic</button>
+      <a mat-raised-button routerLink="." class="button-large">Link</a>
+      <button mat-raised-button disabled class="button-large">Disabled</button>
+    </div>
+  </section>
+  <section>
+    <h3 id="toggle-buttons">Toggle Buttons</h3>
+    <table>
+      <tr>
+        <th>Horizontal</th>
+        <th>Vertical</th>
+      </tr>
+      <tr>
+        <td>
+          <div class="horizontal-toggle-button-groups">
+            <mat-button-toggle-group class="button-large">
+              <mat-button-toggle>Option 1</mat-button-toggle>
+              <mat-button-toggle>Option 2</mat-button-toggle>
+              <mat-button-toggle>Option 3</mat-button-toggle>
+            </mat-button-toggle-group>
+            <mat-button-toggle-group class="button-medium">
+              <mat-button-toggle>Option 1</mat-button-toggle>
+              <mat-button-toggle>Option 2</mat-button-toggle>
+              <mat-button-toggle>Option 3</mat-button-toggle>
+            </mat-button-toggle-group>
+            <mat-button-toggle-group class="button-small">
+              <mat-button-toggle>Option 1</mat-button-toggle>
+              <mat-button-toggle>Option 2</mat-button-toggle>
+              <mat-button-toggle>Option 3</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </td>
+        <td>
+          <div class="vertical-toggle-button-groups">
+            <mat-button-toggle-group class="button-large" vertical>
+              <mat-button-toggle>Option 1</mat-button-toggle>
+              <mat-button-toggle>Option 2</mat-button-toggle>
+              <mat-button-toggle>Option 3</mat-button-toggle>
+            </mat-button-toggle-group>
+            <mat-button-toggle-group class="button-medium" vertical>
+              <mat-button-toggle>Option 1</mat-button-toggle>
+              <mat-button-toggle>Option 2</mat-button-toggle>
+              <mat-button-toggle>Option 3</mat-button-toggle>
+            </mat-button-toggle-group>
+            <mat-button-toggle-group class="button-small" vertical>
+              <mat-button-toggle>Option 1</mat-button-toggle>
+              <mat-button-toggle>Option 2</mat-button-toggle>
+              <mat-button-toggle>Option 3</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </section>
+  <header>
+    <h3 id="check-boxes">Check Boxes</h3>
+  </header>
+  <section class="checkbox-section">
+    <!-- color="accent" by default -->
+    <mat-checkbox color="primary" checked="true">Primary</mat-checkbox>
+    <mat-checkbox checked="true">Accent</mat-checkbox>
+    <mat-checkbox color="warn">Warn</mat-checkbox>
+    <mat-checkbox disabled>Disabled</mat-checkbox>
+  </section>
+  <header>
+    <h3 id="radio-buttons">Radio Buttons</h3>
+  </header>
+  <mat-radio-group>
+    <!-- color="accent" by default -->
+    <mat-radio-button value="1" color="primary">Primary</mat-radio-button>
+    <mat-radio-button value="2">Accent</mat-radio-button>
+    <mat-radio-button value="3" color="warn" checked="true">Warn</mat-radio-button>
+    <mat-radio-button value="4" disabled>Disabled</mat-radio-button>
+  </mat-radio-group>
+  <header>
+    <h3 id="slide-toggles">Slide Toggles</h3>
+  </header>
+  <div class="slide-toggles">
+    <!-- color="accent" by default -->
+    <mat-slide-toggle color="primary" checked="true">Primary</mat-slide-toggle>
+    <mat-slide-toggle>Accent</mat-slide-toggle>
+    <mat-slide-toggle color="warn" checked="true">Warn</mat-slide-toggle>
+    <mat-slide-toggle disabled>Disabled</mat-slide-toggle>
+  </div>
+</article>

@@ -1,0 +1,16 @@
+:host {
+  height: calc(100% - 300px); // 300px for padding
+  padding: 150px 10vw;
+  display: block;
+}
+
+#examples-cards {
+  display: flex;
+  justify-items: auto;
+}
+
+.mat-card {
+  width: 300px;
+  margin-right: 50px;
+  cursor: pointer;
+}

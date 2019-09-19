@@ -1,0 +1,156 @@
+<aside>
+  <ul>
+    <li><a href="/examples/api#making-api-calls">Making API Calls with HttpClient</a></li>
+    <li><a href="/examples/api#errors">Handling Errors</a></li>
+    <li><a href="/examples/api#caching">Caching API Responses</a></li>
+    <li><a href="/examples/api#viewing-cache">Viewing the Cache</a></li>
+  </ul>
+</aside>
+<article>
+  <section>
+    <header>
+      <h3 id='making-api-calls'>Making API Calls with HttpClient</h3>
+    </header>
+    <p>
+      Angular makes API calls pretty straightforward with the HttpClient. Below is a simple call to the version info
+      endpoint of the MessagingApi:
+    </p>
+    <div id="api-example">
+      <h4>Base Version: <span *ngIf=versionInfo>{{versionInfo.versionBase}}</span>
+      </h4>
+      <h4>Version: <span *ngIf=versionInfo>{{versionInfo.version}}</span>
+      </h4>
+      <button mat-raised-button (click)="onClick()">Get API Version Info</button>
+    </div>
+    <p>
+      To set up an API call, start by generating a data access service for HTTP requests. The ExampleDataService
+      in this app uses Angular's HttpClient to make a call to the <code>GetVersionInfo</code> endpoint:
+    </p>
+    <figure>
+      <img src="../../../assets/images/api-examples/api-call.png" alt="">
+    </figure>
+    <p>
+      Next, create a data model (e.g. VersionInfoModel) with properties matching the JSON that will be
+      returned in the HTTP response. The data service can now be called directly from the component and handle the
+      Promise returned by <code>getApiVersion()</code>. This is done in the <code>onClick()</code> event handler which
+      will call the data service and put the results directly into the model.
+      <figure>
+        <img src="../../../assets/images/api-examples/service-call.png">
+      </figure>
+      You can read more about HttpClient calls in <a href="https://angular.io/guide/http" target="_blank">Angular's
+        HttpClient documentation</a>.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='errors'>Handling Errors</h3>
+    </header>
+    <p>
+      What happens if something goes wrong during the API call? Hit F12 to open DevTools, click on the "Console"
+      tab, and try throwing an error:
+    </p>
+    <button class="bad-api-call" mat-raised-button (click)="badApiCall()">Bad API Call</button>
+    <p>
+      You should see a 404 (Not Found) error logged to the console along with the exception data. While this is helpful
+      enough for a development scenario, silently logging the exception is a rather poor user experience. That
+      experience can be improved by using the <code>ErrorService</code> included in this template:
+    </p>
+    <figure>
+      <img src="../../../assets/images/api-examples/error-handling.png">
+    </figure>
+    <p>
+      This way, if an error is thrown, the <code>err</code> block will execute and call
+      <code>ErrorService.showError()</code>. Let's see how the error behaves now:
+    </p>
+    <button class="bad-api-call" mat-raised-button (click)="handledBadApiCall()">Bad API Call</button>
+    <p>
+      The browser still logs a 404 to the console, but the ugly error JSON is no longer output. More importantly, we
+      notify the user that something has gone wrong and lay out some options for reacting to that error.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='caching'>Caching API Responses</h3>
+    </header>
+    <p>
+      A good goal in the world of web development is to never send the same resource to the client twice. Some API
+      responses change very rarely, if ever; making such calls wastes considerable bandwidth, processing power, and
+      slows load times unnecessarily. Caching API responses is highly configurable using service workers; responses can
+      be cached on a per-url basis with control over when the cache becomes invalid. The <code>ngsw-config.json</code>
+      file included with this app has an example configuration:
+    </p>
+    <figure>
+      <img src="../../../assets/images/api-examples/ngsw-config.png" alt="">
+    </figure>
+    <p>
+      The cache is defined for only one url pattern, which matches the url of the "Get API Version Info" call above.
+      This is an array, so multiple urls could be configured to have the same <code>cacheConfig</code> settings.
+      Furthermore, the <code>**</code> blob wildcard denotes any number of characters proceeding the call,
+      so this blob would also match <em>any api</em> with the <code>/Info/GetVersionInfo</code> url.
+    </p>
+    <p>
+      The <code>cacheConfig</code> object defines how the service worker will use the cache and how long that cache
+      remains valid. The <code>strategy</code> property determines how the service worker uses the cache and can be set
+      to one of two values: <code>freshness</code> and <code>performance</code>. A <code>dataGroup</code> set to
+      <code>strategy: "freshness"</code> will always be fetched from the network when requested, but the response will
+      be cached. This way, if network connection is lost, the most recent response is always cached and can be served
+      for a better offline experience. The <code>strategy: "performance"</code> option is the opposite; the user will be
+      served data from the cache, but the service worker will fall back to the network if the cached data becomes
+      invalid.
+    </p>
+    <p>
+      So which strategy should you use? It depends on the use case. If the <code>strategy</code> property is omitted
+      from the <code>cacheConfig</code>, it will be set to <code>performance</code> by default, and in many cases is the
+      best choice. In some instances, however, the data in question changes frequently and should be fetched from the
+      network. As a general rule of thumb, the answer boils down to these two questions:
+    </p>
+    <ul>
+      <li>Does the data change frequently?</li>
+      <li>Is out-of-date data unacceptable?</li>
+    </ul>
+    <p>
+      If the answer to both of those questions is "yes", use the <code>freshness</code> strategy. If not, use
+      <code>performance</code>. Some examples of good <code>freshness</code> cache use cases are chart data and log book
+      data. Other cases like a list of practices or clinics can be cached with the <code>performance</code> strategy.
+    </p>
+    <p>
+      The <code>maxSize</code> and <code>maxAge</code> properties control when the service worker will reject data in
+      the cache. The <code>maxSize</code> properties denotes the number of unique responses that will be allowed to live
+      in the cache at a given time, whereas <code>maxAge</code> denotes the maximum amount of time that can pass before
+      the cached data is deemed invalid. In other words, cached response will be discarded if either it is older
+      than <code>maxAge</code> or it is the oldest record in the cache at the <code>maxSize</code> capacity.
+    </p>
+  </section>
+  <section>
+    <header>
+      <h3 id='viewing-cache'>Viewing the Cache</h3>
+    </header>
+    <p>
+      Chrome Devtools has great service worker tooling. First, run <code>npm run serve:service-worker</code> and close
+      this browser tab. Once the build is done and the <code>http-server</code> is running, head to
+      <code>localhost:4200</code> in a new tab. Hit F12 to open the Devtools and click the Application tab. If your
+      service worker has successfully installed, you should see the following:
+    </p>
+    <figure>
+      <img src="../../../assets/images/api-examples/sw-running.png" alt="">
+    </figure>
+    <p>
+      Expand the Cache Storage item on the left menu. There should be several items in the list, all prefixed with
+      "ngsw". One of them should look something like <code>ngsw:1:data:dynamic:messagingApiVersions</code>: this is
+      where the cached API response will live. Click on it, and you should see an empty table on the right panel. Scroll
+      back up to the top and hit the "Get API Version Info" button again and you should see a record added to the table:
+    </p>
+    <figure>
+      <img src="../../../assets/images/api-examples/cached-response.png" alt="">
+    </figure>
+    <p>
+      Clicking on that row will show both the headers and payload of the cached response. As mentioned above, this
+      response is configured to become invalid after 30 seconds; if you click the "Get API Version Info" button twice
+      within 30 seconds, the Time Cached column will not update, since the cache was still valid.
+    </p>
+    <p>
+      The official documentation on Angular's service worker library is excellent. To learn more about the service
+      worker's capabilities, see the docs <a href="https://angular.io/guide/service-worker-intro">here</a>.
+    </p>
+  </section>
+</article>

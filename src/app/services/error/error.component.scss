@@ -1,0 +1,38 @@
+@import "../../../sass/theme.scss";
+
+// ! THIS COMPONENT IS NOT ENCAPSULATED
+// ! I.E. ANY STYLES YOU PUT HERE WILL BE PUT IN THE GLOBAL STYLES
+// ! NAME THINGS CAREFULLY AND AS SPECIFICALLY AS POSSIBLE TO AVOID CONFLICTS
+
+.mat-snack-bar-container.error {
+  background-color: $warn;
+  color: #fff;
+  text-shadow: 0px 1px 3px #333333;
+}
+
+#error-container {
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#error-container p {
+  margin: 2px 0;
+}
+
+#error-container .contact a {
+  color: inherit;
+}
+
+#error-container .contact {
+  margin: 7px 0;
+}
+
+#error-container-buttons {
+  margin-top: 10px;
+  align-self: flex-end;
+}
+
+#error-container-buttons .mat-raised-button {
+  margin-left: 10px;
+}

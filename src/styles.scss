@@ -1,0 +1,15 @@
+@import "./sass/theme.scss";
+@import "./sass/buttons.scss";
+
+html {
+  font-family: "Open Sans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+  margin-top: 0px;
+}
+
+main {
+  height: 100%;
+  display: block; // for whatever reason IE treats <main> elements as inline
+}
