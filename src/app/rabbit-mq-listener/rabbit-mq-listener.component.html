@@ -1,0 +1,15 @@
+<div class="api">
+    <div class="header">
+        Message Queue via API
+    </div>
+    <li *ngFor="let message of messages">{{message.ChangedEntity}} {{message.ActionType}}</li>
+</div>
+
+<div class="stomp">
+    <div class="header">
+        Message Queue via Stomp
+    </div>
+    <div class="console">
+        <li *ngFor="let msg of stompMessages"> {{msg.ChangedEntity}} {{msg.ActionType}} </li>
+    </div>
+</div>

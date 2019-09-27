@@ -1,8 +1,3 @@
-using System.IO;
-using System.Security.Cryptography;
-using RabbitMqPoc.Authorization;
-using RabbitMqPoc.Extensions;
-using RabbitMqPoc.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RabbitMqPoc.Authorization;
+using RabbitMqPoc.Extensions;
+using RabbitMqPoc.Helper;
+using RabbitMqPoc.Services;
+using System.IO;
+using System.Security.Cryptography;
 
 namespace RabbitMqPoc
 {
@@ -53,11 +54,13 @@ namespace RabbitMqPoc
 
             ConfigureAuth(services, tokenSettings);
 
-
             services.AddSingleton<IAppAuthClient, AppAuthClient>();
             services.AddScoped<IAppAuthApiService, AppAuthApiService>();
             services.AddScoped<ApiServiceHelper>();
-        }
+
+      var queueProcessor = new LiveUpdateService() { Enabled = true };
+      queueProcessor.SetupConnection();
+    }
 
         private void ConfigureAuth(IServiceCollection services, JwtSettingsModel claimsModel)
         {

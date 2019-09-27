@@ -12,4 +12,10 @@ export class Constants {
   static JWT_TOKEN_PREFIX = 'Bearer';
   static PATH_BASE = '/';
   static CURRENT_USER = 'user';
+  static RABBITMQ = {
+    API_PATH_BASE: 'http://localhost:15672/',
+    cluster: 'rabbit@PVBMPRL0587.pv.local',
+    user: 'guest',
+    password: 'guest'
+  };
 }

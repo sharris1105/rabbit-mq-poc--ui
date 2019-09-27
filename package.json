@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
-    "start:local": "concurrently \"ng serve -o -c local\" \"dotnet run watch -p ./../api\"",
+    "start:local": "concurrently \"ng serve -o -c local\" \"dotnet run watch -p ./api\"",
     "start:prod": "ng run rabbit-mq-poc--ui:app-shell && http-server -c-1 ./dist/rabbit-mq-poc--ui -p 4200 -o",
     "serve": "ng serve",
     "serve:local": "ng serve -o -c local",
@@ -34,7 +34,10 @@
     "@angular/service-worker": "~7.2.0",
     "core-js": "^2.5.4",
     "file-saver": "^2.0.2",
+    "ng-stomp": "^0.5.0",
     "rxjs": "~6.3.3",
+    "rxjs-websockets": "^8.0.0",
+    "stompts": "^0.0.8",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
