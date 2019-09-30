@@ -1,15 +1,15 @@
-<div class="api">
-    <div class="header">
-        Message Queue via API
-    </div>
-    <li *ngFor="let message of messages">{{message.ChangedEntity}} {{message.ActionType}}</li>
-</div>
+<mat-form-field appearance="outline" color=accent>
+    <mat-label>Triage Notes</mat-label>
+    <textarea matInput placeholder="Triage Notes" [value]=triageNotes rows="6"
+        (input)="onTriageNoteChange($event.target.value)"></textarea>
+</mat-form-field>
 
 <div class="stomp">
     <div class="header">
         Message Queue via Stomp
     </div>
     <div class="console">
-        <li *ngFor="let msg of stompMessages"> {{msg.ChangedEntity}} {{msg.ActionType}} </li>
+        <li *ngFor="let msg of stompMessages"> {{msg.ChangedEntity}} {{msg.ActionType}}
+        </li>
     </div>
 </div>

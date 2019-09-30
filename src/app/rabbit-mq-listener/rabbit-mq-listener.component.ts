@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { timer } from 'rxjs/internal/observable/timer';
-import * as stomp from 'stompts';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { Message } from '@stomp/stompjs';
+import { Subscription, timer } from 'rxjs';
 import { IEventMessage } from '../interfaces/event-message';
 import { ErrorService } from '../services/error/error.service';
 import { EventListenerService } from '../services/event-listener/event-listener.service';
-import { StompEventListenerService } from '../services/stomp-event-listener/stomp-event-listener.service';
 
 @Component({
     selector: 'app-rabbit-mq-listener',
@@ -13,51 +12,75 @@ import { StompEventListenerService } from '../services/stomp-event-listener/stom
     styleUrls: ['./rabbit-mq-listener.component.scss'],
     providers: [EventListenerService]
 })
-export class RabbitMqListenerComponent implements OnInit {
+export class RabbitMqListenerComponent implements OnInit, OnDestroy {
+
     messages: Array<IEventMessage> = [];
-    // treeControl = new NestedTreeControl<Array<IEventMessage>>(node => node.children);
-    dataSource = new MatTreeNestedDataSource<IEventMessage>();
     stompMessages: Array<IEventMessage> = [];
     isSubscribed: boolean;
+    receivedMessages: Array<string> = [];
+    triageNotes: string;
+    private topicSubscription: Subscription;
 
-    frames: Array<stomp.Frame> = [];
-    title = 'app';
-
-    constructor(private readonly _eventListenerService: EventListenerService, private messageQueue: StompEventListenerService,
-        private readonly errorService: ErrorService) { // api call timer
+    constructor(private rxStompService: RxStompService, private readonly errorService: ErrorService, private eventListenerService: EventListenerService) { // api call timer
         timer(0, 10000)
             .subscribe(() => {
-                //if (this.isSubscribed) return;
                 this.eventListener();
             });
     }
 
     ngOnInit(): void {
-        this.subscribeAsync();                          // stomp subscription
+        this.topicSubscription = this.rxStompService
+            .watch('/exchange/practice.HIQO.clinic.TEST3/chart.bf607f4a-fbde-e911-80c6-0050568210b7.*', { 'x-queue-name': 'myqueue' })
+            .subscribe((message: Message) => {
+                const eventMessage = JSON.parse(message.body) as IEventMessage;
+                this.stompMessages.push(eventMessage);
+                console.log(JSON.stringify(message.body));
+                if (eventMessage.ChangedData.TriageNotes !== undefined) {
+                    this.triageNotes = eventMessage.ChangedData.TriageNotes;
+                }
+            });
     }
 
-    // tslint:disable-next-line:typedef
-    async subscribeAsync() {                          // stomp subscription
-        await this.messageQueue
-            .subscribe('/exchange/practice.HIQO.clinic.TEST3/chart.bf607f4a-fbde-e911-80c6-0050568210b7.*', this.onMessage.bind(this));
-    }
-
-    onMessage(frame: stomp.Frame): void {             // stomp messages
-        this.frames.push(frame);
-        //let frameString = JSON.stringify(frame.body);
-        let thing = JSON.parse(frame.body);
-        let other = thing as IEventMessage;
-        //console.log(other.changedEntity);
-        this.stompMessages.push(other);
+    ngOnDestroy(): void {
+        this.topicSubscription.unsubscribe();
     }
 
     eventListener(): void {
         this.isSubscribed = true;
-        this._eventListenerService.getNextMessage()
+        this.eventListenerService.getNextMessage()
             .subscribe(result => {
                 console.log(JSON.stringify(result));
                 this.messages.push(result as IEventMessage);
-                this.isSubscribed = false;
             });
+    }
+
+    onTriageNoteChange(newNote: string): void {
+        if (this.triageNotes !== newNote) {
+            this.triageNotes = newNote;
+            this.updateEntity(newNote);
+        }
+    }
+
+    updateEntity(newNote: string): void {
+        // tslint:disable-next-line:one-variable-per-declaration
+        const message = new IEventMessage()
+        message.Sender = "MBURKE@ADMIN|PVBMPRL0587|20453913-AFD4-405C-B9EC-DE159A89E6DF";
+        message.ActionType = "Update";
+        message.ChangedEntity = "ChartEntity";
+        message.ChangedData = { "TriageNotes": this.triageNotes };
+        message.ChangedOn = JSON.stringify(Date);
+        message.Environment = "DevTest";
+        message.PrimaryKeys = {
+            'ChartPk': 'bf607f4a-fbde-e911-80c6-0050568210b7'
+        };
+        this.onSendMessage(message);
+    }
+
+    onSendMessage(newEntity: IEventMessage): void {
+        //const message = `Message generated at ${new Date}`;
+        this.rxStompService.publish({
+            destination: '/exchange/practice.HIQO.clinic.TEST3/chart.bf607f4a-fbde-e911-80c6-0050568210b7.*',
+            body: JSON.stringify(newEntity)
+        });
     }
 }

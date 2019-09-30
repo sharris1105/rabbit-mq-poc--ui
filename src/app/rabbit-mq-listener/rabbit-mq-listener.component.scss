@@ -1,33 +1,37 @@
 @import "../../sass/variables.scss";
 
 :host {
-    width: 100%;
-    max-width: 1200px;
-    height: calc(100% - 300px); // 300px for padding
-    padding: 150px 10vw;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  height: calc(100% - 300px); // 300px for padding
+  padding: 150px 10vw;
+  margin: 0 auto;
 
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 * {
-    line-height: 1.8rem;
-    color: #0c1327;
+  line-height: 1.8rem;
+  color: #0c1327;
 }
 
 .stomp {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .rabbit {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .api {
-    width: 50%
+  width: 50%;
+}
+
+.mat-form-field {
+  width: 100%;
 }

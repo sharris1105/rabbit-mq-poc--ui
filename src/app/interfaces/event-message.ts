@@ -7,5 +7,7 @@ export class IEventMessage {
     Environment: string;
     Parents: any;
     PrimaryKeys: any;
-    ChangedData: any;
+    ChangedData: {
+        TriageNotes: any
+    };
 }
