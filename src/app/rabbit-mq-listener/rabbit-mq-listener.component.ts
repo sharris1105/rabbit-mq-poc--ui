@@ -24,7 +24,7 @@ export class RabbitMqListenerComponent implements OnInit, OnDestroy {
     constructor(private rxStompService: RxStompService, private readonly errorService: ErrorService, private eventListenerService: EventListenerService) { // api call timer
         timer(0, 10000)
             .subscribe(() => {
-                this.eventListener();
+                //this.eventListener();
             });
     }
 
