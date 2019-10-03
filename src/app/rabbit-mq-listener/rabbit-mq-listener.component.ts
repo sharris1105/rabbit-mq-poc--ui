@@ -1,9 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { RxStompState } from '@stomp/rx-stomp';
 import { Message } from '@stomp/stompjs';
-import { Subscription, timer } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { IEventMessage } from '../interfaces/event-message';
-import { ErrorService } from '../services/error/error.service';
 import { EventListenerService } from '../services/event-listener/event-listener.service';
 
 @Component({
@@ -17,28 +19,44 @@ export class RabbitMqListenerComponent implements OnInit, OnDestroy {
     messages: Array<IEventMessage> = [];
     stompMessages: Array<IEventMessage> = [];
     isSubscribed: boolean;
-    receivedMessages: Array<string> = [];
-    triageNotes: string;
+    triageNotes = '';
+    connectionStatus$: Observable<string>;
+    selectedTab: string;
+    eventList: Array<Tab>;
     private topicSubscription: Subscription;
 
-    constructor(private rxStompService: RxStompService, private readonly errorService: ErrorService, private eventListenerService: EventListenerService) { // api call timer
-        timer(0, 10000)
-            .subscribe(() => {
-                //this.eventListener();
-            });
+    constructor(private rxStompService: RxStompService, private eventListenerService: EventListenerService,
+        private httpService: HttpClient) {
+        rxStompService.connectionState$.subscribe((state) => {
+            // state is an Enum (Integer), RxStompState[state] is the corresponding string
+            this.connectionStatus$ = rxStompService.connectionState$.pipe(map((state) => {
+                // convert numeric RxStompState to string
+                return RxStompState[state];
+            }));
+            console.log(RxStompState[state]);
+        });
     }
 
     ngOnInit(): void {
         this.topicSubscription = this.rxStompService
-            .watch('/exchange/practice.HIQO.clinic.TEST3/chart.bf607f4a-fbde-e911-80c6-0050568210b7.*', { 'x-queue-name': 'myqueue' })
+            .watch('/topic/EMR.HIQO.TEST', { 'selector': 'chart = \'63a49833-45e5-e911-80c6-0050568210b7\' AND Sender <> \'SAM@ADMIN|PVBMPRL0587|20453913-AFD4-405C-B9EC-DE159A89E6DF\'' })
+            // chart = '63a49833-45e5-e911-80c6-0050568210b7' AND Sender <> 'SHARRIS@ADMIN|PVBMPRL0587|20453913-AFD4-405C-B9EC-DE159A89E6DF'
             .subscribe((message: Message) => {
                 const eventMessage = JSON.parse(message.body) as IEventMessage;
                 this.stompMessages.push(eventMessage);
-                console.log(JSON.stringify(message.body));
                 if (eventMessage.ChangedData.TriageNotes !== undefined) {
                     this.triageNotes = eventMessage.ChangedData.TriageNotes;
                 }
             });
+        this.httpService.get('./../../assets/event-data.json')
+            .subscribe(
+                data => {
+                    this.eventList = data as Array<Tab>;
+                    this.eventList.forEach(element => {
+                        let tab = element as Tab;
+                        console.log(tab.tab);
+                    });
+                });
     }
 
     ngOnDestroy(): void {
@@ -71,16 +89,35 @@ export class RabbitMqListenerComponent implements OnInit, OnDestroy {
         message.ChangedOn = JSON.stringify(Date);
         message.Environment = "DevTest";
         message.PrimaryKeys = {
-            'ChartPk': 'bf607f4a-fbde-e911-80c6-0050568210b7'
+            'ChartPk': '63a49833-45e5-e911-80c6-0050568210b7'
         };
         this.onSendMessage(message);
+        console.log(JSON.stringify(message));
     }
 
     onSendMessage(newEntity: IEventMessage): void {
         //const message = `Message generated at ${new Date}`;
         this.rxStompService.publish({
-            destination: '/exchange/practice.HIQO.clinic.TEST3/chart.bf607f4a-fbde-e911-80c6-0050568210b7.*',
-            body: JSON.stringify(newEntity)
+            destination: '/topic/EMR.HIQO.TEST',
+            body: JSON.stringify(newEntity),
+            headers: { chart: "63a49833-45e5-e911-80c6-0050568210b7", Sender: "SAM@ADMIN|PVBMPRL0587|20453913-AFD4-405C-B9EC-DE159A89E6DF", ChangedEntity: "ChartEntity" }
         });
     }
+
+    unsubscribe(): void {
+        this.topicSubscription.unsubscribe();
+    }
+}
+
+export class Tab {
+    tab: string;
+    actions: Array<EventData>;
+}
+
+export class EventData {
+    summary: string;
+    actionType: string;
+    changedEntity: string;
+    primaryKeys: any;
+    changedData: any;
 }

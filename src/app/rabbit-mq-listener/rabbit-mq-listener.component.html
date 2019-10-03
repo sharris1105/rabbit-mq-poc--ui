@@ -1,3 +1,9 @@
+<div id="status">
+    <div id="indicator" class="{{connectionStatus$|async}}"></div>
+    <span id="status-label">{{connectionStatus$|async}}</span>
+</div>
+<button (click)=unsubscribe()>Unsubscribe</button>
+
 <mat-form-field appearance="outline" color=accent>
     <mat-label>Triage Notes</mat-label>
     <textarea matInput placeholder="Triage Notes" [value]=triageNotes rows="6"
