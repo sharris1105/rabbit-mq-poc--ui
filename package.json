@@ -51,7 +51,7 @@
         "angular-tslint-rules": "^1.18.0",
         "codelyzer": "^5.0.0",
         "concurrently": "^4.1.2",
-        "http-server": "0.9.0",
+        "http-server": "14.1.1",
         "jasmine-core": "~2.99.1",
         "jasmine-spec-reporter": "~4.2.1",
         "karma": "~4.0.0",
